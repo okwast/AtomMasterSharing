@@ -2,7 +2,7 @@ AtomMasterSharingView = require './atom-master-sharing-view'
 {CompositeDisposable} = require 'atom'
 editorManager = require './editorManager'
 # testEditor = require './testEditor'
-serverManager = require './serverTransformManager'
+msc = require 'mastersharingcore'
 
 module.exports = AtomMasterSharing =
   atomMasterSharingView: null
@@ -57,7 +57,7 @@ module.exports = AtomMasterSharing =
       port = atom.config.get 'package.portForSharingDocument'
       port = 8989
 
-      @server = new serverManager false, port
+      @server = msc.createServer port
 
       editor.manager = new editorManager editor
       , "http://localhost:#{port}"
