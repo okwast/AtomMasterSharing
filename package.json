@@ -1,18 +1,27 @@
 {
   "name": "atom-master-sharing",
   "main": "./lib/atom-master-sharing",
-  "version": "0.0.0",
-  "description": "A short description of your package",
-  "keywords": [
+  "version": "0.0.1",
+  "description": "This is an Atom plugin using the MasterSharing System for distributed group programming.",
+  "keywords": [],
+  "activationCommands": [
+    {
+      "atom-workspace": "package:startSession"
+    },
+    {
+      "atom-workspace": "package:connect"
+    }
   ],
-  "activationCommands": {
-    "atom-workspace": "atom-master-sharing:toggle"
-  },
   "repository": "https://github.com/atom/atom-master-sharing",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "socket.io": "^1.3.7",
+    "socket.io-client": "^1.3.7",
+    "sub-atom": "^1.1.0"
   }
 }

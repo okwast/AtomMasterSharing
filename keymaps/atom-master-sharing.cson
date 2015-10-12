@@ -8,4 +8,7 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 'atom-workspace':
-  'ctrl-alt-o': 'atom-master-sharing:toggle'
+  'ctrl-alt-o': 'atom-master-sharing:connect'
+  'ctrl-alt-p': 'atom-master-sharing:startSession'
+  'ctrl-alt-t': 'atom-master-sharing:startTest'
+  'ctrl-alt-ü': 'atom-master-sharing:showMenu'
