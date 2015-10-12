@@ -1,4 +1,4 @@
-clientTM = require('./MasterSharingCore')
+clientTM = require('mastersharingcore')
 events = require 'events'
 types = require './types'
 {Color} = require 'atom'
