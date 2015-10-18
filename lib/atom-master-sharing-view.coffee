@@ -15,7 +15,7 @@ class AtomMasterSharingView
             Enter path of your partner
           </td>
           <td>
-            <atom-text-editor mini id="sharingPath" style="width: 300px">http://localhost:#{atom.config.get('package.portForSharingDocument')}</atom-text-editor>
+            <atom-text-editor mini id="sharingPath" style="width: 300px">http://localhost:#{atom.config.get('atom-master-sharing.portForSharingDocument')}</atom-text-editor>
           </td>
         </tr>
       </table>

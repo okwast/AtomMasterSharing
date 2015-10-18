@@ -54,8 +54,11 @@ module.exports = AtomMasterSharing =
   startSession: ->
     if (editor = atom.workspace.getActiveTextEditor()) and !editor.manager?
       console.log "Server started"
-      port = atom.config.get 'package.portForSharingDocument'
+      port = atom.config.get 'atom-master-sharing.portForSharingDocument'
       port = 8989
+
+      console.log 'msc'
+      console.log msc
 
       @server = msc.createServer port
 
@@ -77,7 +80,7 @@ module.exports = AtomMasterSharing =
     console.log "Client started"
     if !@modalPanel.isVisible()
       @modalPanel.show()
-      @packageView.setCallback (path) =>
+      @atomMasterSharingView.setCallback (path) =>
         @modalPanel.hide()
         # atom.workspace.open()
         if (editor = atom.workspace.getActiveTextEditor()) and !editor.manager?
@@ -92,7 +95,7 @@ module.exports = AtomMasterSharing =
         # client.start host, port
 
   showMenu: ->
-    # console.log atom.config.get('package.portForSharingDocument')
+    console.log atom.config.get('atom-master-sharing.portForSharingDocument')
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
@@ -105,5 +108,6 @@ module.exports = AtomMasterSharing =
   #     @packageView.setCallback (path) =>
   #       @modalPanel.hide()
   #       # atom.workspace.open()
-  #       if (editor = atom.workspace.getActiveTextEditor()) and !editor.manager?
+  #       if (editor = atom.workspace.getActiveTextEditor())
+  #and !editor.manager?
   #         tester = new testEditor path

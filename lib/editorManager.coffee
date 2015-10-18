@@ -1,4 +1,4 @@
-clientTM = require('mastersharingcore')
+clientTM = require 'mastersharingcore'
 events = require 'events'
 types = require './types'
 {Color} = require 'atom'
@@ -18,6 +18,9 @@ module.exports =
       @buffer = @editor.buffer
       @tm = clientTM.createClient url, "Test", 'white'
 
+      console.log '@tm'
+      console.log @tm
+
       @bufferDo =>
         @buffer.onDidChange @bufferChanged
 
@@ -25,6 +28,9 @@ module.exports =
 
         @tm.on types.initialized, @initialized
         @tm.on types.clear, @clearBuffer
+        # @tm.on types.textChange, (x) ->
+        #   console.log 'textChange'
+        #   console.log 'x'
         @tm.on types.textChange, @changeText
         @tm.on types.newUser, @newUser
         @tm.on types.userLeft, @userLeft
@@ -54,6 +60,8 @@ module.exports =
       atom.notifications.addError msg
 
     bufferChanged: (event) =>
+      console.log 'bufferChanged'
+      console.log event
       return if @manualEdited
       if event.oldText is "" and event.newText isnt ""
         @tm.textChanged
@@ -110,6 +118,7 @@ module.exports =
           #TODO react to problem
 
     initialized: =>
+      console.log 'initialized'
       @editorDo =>
         @editor.setCursorBufferPosition
           row:    0
@@ -120,6 +129,7 @@ module.exports =
         @buffer.setText ""
 
     changeText: (data) =>
+      console.log 'changeText'
       @bufferDo =>
         @manual => @buffer.setTextInRange data.oldRange
         , data.newText, @options
