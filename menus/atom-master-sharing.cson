@@ -1,16 +1,11 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
-  'atom-text-editor': [
-    # {
-    #   'label': 'Toggle atom-master-sharing'
-    #   'command': 'atom-master-sharing:toggle'
-    # }
-  ]
+  'atom-text-editor': []
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'package'
+      'label': 'Atom Master Sharing'
       'submenu': [
         {
           'label': 'StartClient'
@@ -19,10 +14,6 @@
         {
           'label': 'StartServer'
           'command': 'atom-master-sharing:startSession'
-        },
-        {
-          'label': 'StartTest'
-          'command': 'atom-master-sharing:startTest'
         }
       ]
     ]

@@ -16,7 +16,12 @@ module.exports =
 
     constructor: (@editor, url) ->
       @buffer = @editor.buffer
-      @tm = clientTM.createClient url, "Test", 'white'
+      color = atom.config.get 'atom-master-sharing.color'
+      @tm = clientTM.createClient url, "", color.toHexString()
+
+      console.log 'color'
+      console.log color
+      console.log Color
 
       console.log '@tm'
       console.log @tm
@@ -145,6 +150,9 @@ module.exports =
       id = transform.clientId
       color = transform.color
 
+      console.log 'addCursor'
+      console.log color
+
       range =
         start:
           row:    0
@@ -187,11 +195,11 @@ module.exports =
 
         string =
           """.collaborationManSelection#{transform.clientId} div.region {
-            background-color: yellow;
+            background-color: #{color};
             opacity: 0.25;
           }
           .collaborationManLine#{transform.clientId} {
-            background-color: rgba(255,255,0,0.03);
+            background-color: rgba(255,255,255,0.03);
           }"""
 
         root            = atom.views.getView(@editor).shadowRoot

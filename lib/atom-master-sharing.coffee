@@ -11,9 +11,9 @@ module.exports = AtomMasterSharing =
   server: undefined
 
   config:
-    username:
-      type: 'string'
-      default: 'Username'
+    # username:
+    #   type: 'string'
+    #   default: 'Username'
     color:
       type: 'color'
       default: 'blue'
@@ -40,8 +40,8 @@ module.exports = AtomMasterSharing =
       'atom-master-sharing:startSession': => @startSession()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:showMenu': => @showMenu()
-    @subscriptions.add atom.commands.add 'atom-workspace',
-      'atom-master-sharing:startTest': => @startTest()
+    # @subscriptions.add atom.commands.add 'atom-workspace',
+    #   'atom-master-sharing:startTest': => @startTest()
 
   deactivate: ->
     @modalPanel.destroy()
@@ -56,9 +56,6 @@ module.exports = AtomMasterSharing =
       console.log "Server started"
       port = atom.config.get 'atom-master-sharing.portForSharingDocument'
       port = 8989
-
-      console.log 'msc'
-      console.log msc
 
       @server = msc.createServer port
 
