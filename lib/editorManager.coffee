@@ -143,10 +143,10 @@ module.exports =
       @addCursor user
 
     userLeft: (user) =>
+      console.log "user left"
       @removeCursor user
 
     addCursor: (transform) =>
-      #TODO ugly
       id = transform.clientId
       color = transform.color
 
@@ -191,14 +191,14 @@ module.exports =
 
         lineDecoration = @editor.decorateMarker marker,
           type:       'line'
-          class:      "collaborationManLine#{transform.clientId}"
+          class:      "atom-master-sharingLine#{transform.clientId}"
 
         string =
-          """.collaborationManSelection#{transform.clientId} div.region {
+          """.atom-master-sharingSelection#{transform.clientId} div.region {
             background-color: #{color};
             opacity: 0.25;
           }
-          .collaborationManLine#{transform.clientId} {
+          .atom-master-sharingLine#{transform.clientId} {
             background-color: rgba(255,255,255,0.03);
           }"""
 
@@ -215,7 +215,7 @@ module.exports =
     createSelectionDecoration: (cursor) =>
       cursor.selectionDecoration = @editor.decorateMarker cursor.marker,
         type:  'highlight'
-        class: "collaborationManSelection#{cursor.id}"
+        class: "atom-master-sharingSelection#{cursor.id}"
 
     changeCursor: (transform) =>
       for cursor in @otherCursors
