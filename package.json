@@ -1,7 +1,7 @@
 {
   "name": "atom-master-sharing",
   "main": "./lib/atom-master-sharing",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This is an Atom plugin using the MasterSharing System for distributed group programming.",
   "keywords": [],
   "activationCommands": [
