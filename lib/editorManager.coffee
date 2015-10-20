@@ -13,8 +13,9 @@ module.exports =
     manualEdited:     false
     options:          undo: 'skip'
     otherCursors:     []
+    firstConnector:   false
 
-    constructor: (@editor, url) ->
+    constructor: (@editor, url, @firstConnector) ->
       @buffer = @editor.buffer
       color = atom.config.get 'atom-master-sharing.color'
       @tm = clientTM.createClient url, "", color.toHexString()
@@ -32,7 +33,7 @@ module.exports =
         @editor.onDidChangeSelectionRange @selectionChanged
 
         @tm.on types.initialized, @initialized
-        @tm.on types.clear, @clearBuffer
+        @tm.on types.clear, @resetBuffer
         @tm.on types.textChange, @changeText
         @tm.on types.newUser, @newUser
         @tm.on types.userLeft, @userLeft
@@ -126,9 +127,12 @@ module.exports =
           row:    0
           column: 0
 
-    clearBuffer: =>
+    resetBuffer: =>
       @bufferDo =>
-        @buffer.setText ""
+        if @firstConnector
+          @buffer.setText @buffer.getText()
+        else
+          @buffer.setText ""
 
     changeText: (data) =>
       console.log 'changeText'

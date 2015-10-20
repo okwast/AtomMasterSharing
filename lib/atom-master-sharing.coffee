@@ -37,7 +37,7 @@ module.exports = AtomMasterSharing =
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:connect': => @connect()
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'atom-master-sharing:startSession': => @startSession()
+      'atom-master-sharing:startSharing': => @startSession()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:showMenu': => @showMenu()
     # @subscriptions.add atom.commands.add 'atom-workspace',
@@ -60,7 +60,7 @@ module.exports = AtomMasterSharing =
       @server = msc.createServer port
 
       editor.manager = new editorManager editor
-      , "http://localhost:#{port}"
+      , "http://localhost:#{port}", true
 
       editor.manager.notify "Started sharing on port #{port}"
     # if server.isActive
