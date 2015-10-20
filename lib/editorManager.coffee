@@ -27,8 +27,9 @@ module.exports =
     # Callbacks are registered for important events.
     constructor: (@editor, url, @firstConnector) ->
       @buffer = @editor.buffer
+      username = atom.config.get 'atom-master-sharing.username'
       color = atom.config.get 'atom-master-sharing.color'
-      @tm = clientTM.createClient url, "", color.toHexString()
+      @tm = clientTM.createClient url, username, color.toHexString()
 
       @bufferDo =>
         @buffer.onDidChange @bufferChanged
@@ -147,6 +148,7 @@ module.exports =
 
     # A new user has connected
     newUser: (user) =>
+      @notify "#{user.username} connected to the session."
       @addCursor user
 
     # A user left the session

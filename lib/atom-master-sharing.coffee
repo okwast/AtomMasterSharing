@@ -16,6 +16,9 @@ module.exports = AtomMasterSharing =
   # Set up the settings that are visible in the settings view
   # of this plugin
   config:
+    username:
+      type: 'string'
+      default: 'Username'
     color:
       type: 'color'
       default: 'blue'
