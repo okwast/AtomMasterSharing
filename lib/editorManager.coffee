@@ -141,7 +141,6 @@ module.exports =
 
     # Changes the text in the buffer
     changeText: (data) =>
-      console.log 'changeText'
       @bufferDo =>
         @manual => @buffer.setTextInRange data.oldRange
         , data.newText, @options
@@ -153,7 +152,6 @@ module.exports =
 
     # A user left the session
     userLeft: (user) =>
-      console.log "user left"
       @removeCursor user
 
     # New markers for a cursor and a selection are created.
