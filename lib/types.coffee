@@ -1,3 +1,5 @@
+# Here are many constants defined, to prevent spelling mistakes
+
 module.exports =
   textChange:         "textChange"
   insertion:          "insertion"
@@ -10,7 +12,7 @@ module.exports =
   removeCursor:       "removeCursor"
   selectionChanged:   "selectionChanged"
   clientConnected:    "newClient"
-  clientDisconnected: "clientLeft"
+  clientDisconnected: "clientDisconnected"
   initialize:         "initialize"
   initialized:        "initialized"
   clear:              "clear"

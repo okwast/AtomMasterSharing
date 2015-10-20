@@ -33,9 +33,6 @@ module.exports =
 
         @tm.on types.initialized, @initialized
         @tm.on types.clear, @clearBuffer
-        # @tm.on types.textChange, (x) ->
-        #   console.log 'textChange'
-        #   console.log 'x'
         @tm.on types.textChange, @changeText
         @tm.on types.newUser, @newUser
         @tm.on types.userLeft, @userLeft
