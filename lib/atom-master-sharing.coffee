@@ -97,7 +97,6 @@ module.exports = AtomMasterSharing =
   # This function toggles the visibility of the view at the top
   # so that it can be closed without connecting to a sharing session.
   showMenu: ->
-    console.log atom.config.get('atom-master-sharing.portForSharingDocument')
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
