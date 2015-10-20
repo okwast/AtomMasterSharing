@@ -5,27 +5,30 @@ types = require './types'
 {Point} = require 'atom'
 {Range} = require 'atom'
 
+# This is the main part of the plugin.
+# It represents the document in which sharing takes place.
+# Therefore a client of the MasterSharingCore module is created,
+# which is called clientTM here.
 module.exports =
   class EditorManager extends events.EventEmitter
     editor:           undefined
     buffer:           undefined
     tm:               undefined
+    # See the description of the manual function for information
+    # about manualEdited.
     manualEdited:     false
     options:          undo: 'skip'
     otherCursors:     []
+    # firstConnector is a flag to know, wether this client is the
+    # first connecting to the server or not
     firstConnector:   false
 
+    # A new client is created, which connects to the given URL.
+    # Callbacks are registered for important events.
     constructor: (@editor, url, @firstConnector) ->
       @buffer = @editor.buffer
       color = atom.config.get 'atom-master-sharing.color'
       @tm = clientTM.createClient url, "", color.toHexString()
-
-      console.log 'color'
-      console.log color
-      console.log Color
-
-      console.log '@tm'
-      console.log @tm
 
       @bufferDo =>
         @buffer.onDidChange @bufferChanged
@@ -41,30 +44,34 @@ module.exports =
         @tm.on 'end', ->
         @tm.on 'error', ->
 
-    parseUrl: (url) ->
-      url = url.split ':'
-      {host: url[0], port: url[1]}
-
+    # This function is an important one.
+    # It gets a function and executes it, but changes the
+    # @manualEdited variable.
+    # The @manualEdited variable controls,
+    # whether an update of the editor has been applied by the user
+    # or by another sharing partner.
+    # That is important, because changes by someone else must not
+    # be synchronized again, because that would result in an
+    # infinite sharing loop
     manual: (callback) =>
       @manualEdited = true
       callback()
       @manualEdited = false
 
     notify: (msg) ->
-      # @emit 'info', msg
       atom.notifications.addInfo msg
 
     warn: (msg) ->
-      # @emit 'warn', msg
       atom.notifications.addWarning msg
 
     error: (msg) ->
-      # @emit 'error', msg
       atom.notifications.addError msg
 
+    # This function gets called, when a change in the buffer happens.
+    # If the change has been done by the sharing session
+    # no further handling is neccessary and it must not be send to the server.
+    # If the change is made by the user it is send to the server.
     bufferChanged: (event) =>
-      console.log 'bufferChanged'
-      console.log event
       return if @manualEdited
       if event.oldText is "" and event.newText isnt ""
         @tm.textChanged
@@ -93,40 +100,37 @@ module.exports =
       else
         return
 
-    # cursorChanged: (event) =>
-    #   @tm.cursorChanged
-    #     type: types.updateCursor
-    #     pos:  event.newScreenPosition
-
+    # This function gets called, when a selection made by the user has changed.
+    # The new selection position is then send to the server.
     selectionChanged: (event) =>
       @tm.cursorChanged
         type:  types.updateCursor
         range: event.newBufferRange
 
+    # This function gets a callback and executes it, when the editor exists
     editorDo: (callback) =>
       if @editor?
         callback()
       else
-        # @emit 'noEditor'
         error "No Editor"
-        #TODO react to problem
 
+    # Same purpose as editorDo
     bufferDo: (callback) =>
       @editorDo =>
         if @buffer?
           callback()
         else
-          # @emit 'noBuffer'
           @error "No Buffer"
-          #TODO react to problem
 
+    # This gets called, when the network is initialized
+    # and the system is ready to start sharing
     initialized: =>
-      console.log 'initialized'
       @editorDo =>
         @editor.setCursorBufferPosition
           row:    0
           column: 0
 
+    # Resets the buffer when the sharing starts
     resetBuffer: =>
       @bufferDo =>
         if @firstConnector
@@ -134,25 +138,30 @@ module.exports =
         else
           @buffer.setText ""
 
+    # Changes the text in the buffer
     changeText: (data) =>
       console.log 'changeText'
       @bufferDo =>
         @manual => @buffer.setTextInRange data.oldRange
         , data.newText, @options
 
+    # A new user has connected
     newUser: (user) =>
       @addCursor user
 
+    # A user left the session
     userLeft: (user) =>
       console.log "user left"
       @removeCursor user
 
+    # New markers for a cursor and a selection are created.
+    # To create the new cursor a new object is inserted to
+    # the DOM tree.
+    # The selection marker can be created via the atom API.
+    # Also a line marker is added.
     addCursor: (transform) =>
       id = transform.clientId
       color = transform.color
-
-      console.log 'addCursor'
-      console.log color
 
       range =
         start:
@@ -218,6 +227,8 @@ module.exports =
         type:  'highlight'
         class: "atom-master-sharingSelection#{cursor.id}"
 
+    # Change the cursor of a user
+    # The cursor will be hidden, if a selection is made
     changeCursor: (transform) =>
       for cursor in @otherCursors
         if cursor.id is transform.id
@@ -231,5 +242,6 @@ module.exports =
             cursor.cursor.style.visibility = 'hidden'
             @createSelectionDecoration cursor unless cursor.selectionDecoration?
 
+    # Check wether a range is emtpy
     rangeIsEmpty: (range) ->
       range.start.row is range.end.row && range.start.column is range.end.column

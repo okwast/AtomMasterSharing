@@ -4,16 +4,18 @@ editorManager = require './editorManager'
 # testEditor = require './testEditor'
 msc = require 'mastersharingcore'
 
+
+# This is the entry point of the atom master sharing plugin.
+# In this file commands for activation are set.
 module.exports = AtomMasterSharing =
   atomMasterSharingView: null
   modalPanel: null
   subscriptions: null
   server: undefined
 
+  # Set up the settings that are visible in the settings view
+  # of this plugin
   config:
-    # username:
-    #   type: 'string'
-    #   default: 'Username'
     color:
       type: 'color'
       default: 'blue'
@@ -21,7 +23,9 @@ module.exports = AtomMasterSharing =
       type: 'integer'
       default: '8989'
 
+  # Initialize this plugin on startup
   activate: (state) ->
+    # Create the view for entering the address of your sharing partner
     @atomMasterSharingView = new
       AtomMasterSharingView(state.atomMasterSharingViewState)
     @modalPanel = atom.workspace.addModalPanel(
@@ -33,16 +37,16 @@ module.exports = AtomMasterSharing =
     # cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
-    # Register command that toggles this view
+    # Register commands, which are allowed to trigger the
+    # activation of this plugin
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:connect': => @connect()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:startSharing': => @startSession()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'atom-master-sharing:showMenu': => @showMenu()
-    # @subscriptions.add atom.commands.add 'atom-workspace',
-    #   'atom-master-sharing:startTest': => @startTest()
 
+  # Deactivation of plugin
   deactivate: ->
     @modalPanel.destroy()
     @subscriptions.dispose()
@@ -51,11 +55,12 @@ module.exports = AtomMasterSharing =
   serialize: ->
     atomMasterSharingViewState: @atomMasterSharingView.serialize()
 
+  # Start a sharing session
+  # This function creates a server with the port specified in the settings view
+  # Afterwards a client is created, which directly connects to the server
   startSession: ->
     if (editor = atom.workspace.getActiveTextEditor()) and !editor.manager?
-      console.log "Server started"
       port = atom.config.get 'atom-master-sharing.portForSharingDocument'
-      port = 8989
 
       @server = msc.createServer port
 
@@ -71,40 +76,26 @@ module.exports = AtomMasterSharing =
     #   console.log "Server was started on port:"+
     #   " #{atom.config.get('package.portForSharingDocument')}"
 
+  # Calling this function opens a view at the top of the window.
+  # There you can enter an URL with a port and hit enter.
+  # Then a new editorManager is created.
+  # Each editor manager handles one editor.
+  # In general an editor is nothing more than a document,
+  # which can be opened in multiple windows.
   connect: ->
-    # console.log 'Package was toggled!'
-    # client.start 'localhost', 8989
-    console.log "Client started"
     if !@modalPanel.isVisible()
       @modalPanel.show()
       @atomMasterSharingView.setCallback (path) =>
         @modalPanel.hide()
-        # atom.workspace.open()
         if (editor = atom.workspace.getActiveTextEditor()) and !editor.manager?
           editor.manager = new editorManager editor, path
           editor.manager.notify "Connected to partner"
 
-        # s = path.split ':'
-        # host = s[0]
-        # port = s[1]
-        # console.log host
-        # console.log port
-        # client.start host, port
-
+  # This function toggles the visibility of the view at the top
+  # so that it can be closed without connecting to a sharing session.
   showMenu: ->
     console.log atom.config.get('atom-master-sharing.portForSharingDocument')
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
       @modalPanel.show()
-
-  # startTest: ->
-  #   console.log "Test started"
-  #   if !@modalPanel.isVisible()
-  #     @modalPanel.show()
-  #     @packageView.setCallback (path) =>
-  #       @modalPanel.hide()
-  #       # atom.workspace.open()
-  #       if (editor = atom.workspace.getActiveTextEditor())
-  #and !editor.manager?
-  #         tester = new testEditor path

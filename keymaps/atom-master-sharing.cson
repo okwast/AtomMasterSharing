@@ -11,4 +11,3 @@
   'ctrl-alt-o': 'atom-master-sharing:connect'
   'ctrl-alt-p': 'atom-master-sharing:startSharing'
   'ctrl-alt-ü': 'atom-master-sharing:showMenu'
-  # 'ctrl-alt-t': 'atom-master-sharing:startTest'

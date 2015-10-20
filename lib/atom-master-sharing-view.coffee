@@ -1,6 +1,7 @@
 SubAtom = require 'sub-atom'
 subs = new SubAtom
 
+# This creates the view that is displayed at the top.
 module.exports =
 class AtomMasterSharingView
   constructor: (serializedState) ->
@@ -20,15 +21,6 @@ class AtomMasterSharingView
         </tr>
       </table>
     """
-
-    # subs.add @element, 'click', '#ultrabutton', =>
-    #   @test()
-    #   atom.beep()
-    #   usernameField = @element.querySelector('#sharingPath')
-    #   root = usernameField.shadowRoot
-    #   lines = root.querySelector('.text.plain')
-    #   if lines?
-    #     console.log lines.innerHTML
 
     subs.add @element, 'core:confirm', =>
       pathElem = @element.querySelector('#sharingPath')
@@ -51,5 +43,7 @@ class AtomMasterSharingView
   getElement: ->
     @element
 
+  # This sets the callback that is called,
+  # when the enter key is hit, while the URL is entered
   setCallback: (callback) ->
     @callback = callback

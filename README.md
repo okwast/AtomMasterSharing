@@ -49,4 +49,7 @@ Therefore open the settings view of Atom, go to the packages tab, search for Ato
 
 ## Note
 This uses the npm module [MasterSharingCore](https://www.npmjs.com/package/mastersharingcore), which is in an early state of development and should not yet be used in a productive environment.
-Feel also free to have a look at its [code at github](https://github.com/okwast/MasterSharingCore).
+Feel free to have a look at its [code at github](https://github.com/okwast/MasterSharingCore).
+
+The core parts of this plugin are found in the lib folder.
+The entry point is the atom-master-sharing.coffee, where as the main part is found in the editorManager.coffee.
