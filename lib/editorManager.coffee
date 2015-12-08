@@ -213,7 +213,7 @@ module.exports =
           }"""
 
         root            = atom.views.getView(@editor).shadowRoot
-        style           = root.getElementsByTagName('style')[0]
+        style           = root.childNodes[0]
         style.innerHTML = style.innerHTML + string
 
         @otherCursors.push
